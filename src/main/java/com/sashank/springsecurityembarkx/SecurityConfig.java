@@ -18,9 +18,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(requests ->
                         requests.anyRequest().authenticated()
-                )
-                .formLogin(withDefaults())
-                .httpBasic(withDefaults());
+                );
+            //making session stateless i.e. not creating session for each request (cookies disabled)
+                http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .formLogin(withDefaults());
+                //.httpBasic(withDefaults());
 
         return http.build();
     }
