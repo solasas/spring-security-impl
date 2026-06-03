@@ -2,6 +2,7 @@ package com.sashank.springsecurityembarkx;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +16,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -25,8 +27,8 @@ public class SecurityConfig {
                 );
             //making session stateless i.e. not creating session for each request (cookies disabled)
                 http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .formLogin(withDefaults());
-//                .httpBasic(withDefaults());
+//                .formLogin(withDefaults());
+                .httpBasic(withDefaults());
 
         return http.build();
     }
@@ -39,7 +41,7 @@ public class SecurityConfig {
                 roles("USER").
                 build();
 
-        UserDetails admin= User.withUsername("admin ").
+        UserDetails admin= User.withUsername("admin").
                 password("{noop}adminpassword").
                 roles("ADMIN").
                 build();
