@@ -21,15 +21,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .authorizeHttpRequests(requests ->
-                        requests.anyRequest().authenticated()
-                );
+        http.csrf(csrf -> csrf.disable());   //disabling CSRF protection for simplicity in testing with Postman
+        http.authorizeHttpRequests(requests ->requests.anyRequest().authenticated());
+//        http
+//                .authorizeHttpRequests(requests ->
+//                        requests.requestMatchers("/", "/greet").
+//                                permitAll()
+//                                .anyRequest().authenticated()
+//                );
             //making session stateless i.e. not creating session for each request (cookies disabled)
-                http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .formLogin(withDefaults());
                 .httpBasic(withDefaults());
-
         return http.build();
     }
 
@@ -47,4 +50,5 @@ public class SecurityConfig {
                 build();
         return new InMemoryUserDetailsManager(user1,admin);
     }
+
 }
